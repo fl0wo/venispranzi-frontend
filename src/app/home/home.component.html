@@ -1,0 +1,94 @@
+﻿<h1>
+    Ciao <label *ngIf="currentUser">{{currentUser.data.name}}!</label></h1>
+<p>Home</p>
+
+<h1>
+    Menù di oggi! :
+</h1>
+
+
+<ul>
+    <li *ngFor="let menu of menus;let i = index">
+
+        <div class="card" style="padding : 15px">
+            <div class="card-content">
+                <div class="media">
+                    <div class="media-left">
+                        <figure class="image is-48x48">
+                            <img src="https://static.123apps.com/pdf/i/fav/64.png" alt="Download image">
+                        </figure>
+                    </div>
+                    <div class="media-content" style="padding-left : 10px">
+                        <p class="title is-4"> Menù inserito da : {{menu.inserted_by.name}} {{menu.inserted_by.surname}}</p>
+                        <p class="title is-4"> {{menu.inserted_by.email}}</p>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <header class="card-header">
+                        <p class="card-header-title">
+                            Piatti
+                        </p>
+                        <a href="#" class="card-header-icon" aria-label="more options">
+                            <span class="icon">
+                              <i class="fas fa-angle-down" aria-hidden="true"></i>
+                            </span>
+                        </a>
+                    </header>
+                    <div class="card-content" *ngIf="indexMenuSelected==i">
+
+                        <mat-selection-list #shoes>
+                            <mat-list-option *ngFor="let plate of menu.plates">
+                                {{plate.name}}
+                            </mat-list-option>
+                        </mat-selection-list>
+
+
+
+                        <p>
+                            Options selected: {{shoes.selectedOptions.selected.length}}
+                        </p>
+
+
+
+                    </div>
+                    <footer class="card-footer">
+
+                    </footer>
+                </div>
+
+                <div class="content">
+                    <time datetime="2016-1-1">{{menu.inserted_on  | date}}</time>
+                </div>
+            </div>
+        </div>
+
+        <a [href]="'http://172.22.8.160:3000/menu/pdf/'+menu.name_file" class="text-danger">Scarica</a>
+    </li>
+</ul>
+
+
+<h1>
+    Inserisci nuovo Menù! :
+</h1>
+
+<div class="field">
+    <div class="file is-centered is-boxed is-success has-name">
+        <label class="file-label">
+            <input class="file-input"type="file" (change)="fileChange($event)" placeholder="Carica Menù pdf" accept=".pdf,.doc,.docx" name="resume" >
+            <span class="file-cta">
+              <span class="file-icon">
+                <i class="fas fa-upload"></i>
+              </span>
+              <span class="file-label">
+                Upload PDF
+              </span>
+            </span>
+            <span class="file-name">
+              nome-file.pdf
+            </span>
+          </label>
+    </div>
+</div>
+
+<!-- <input type="file" (change)="fileChange($event)" placeholder="Carica Menù pdf" accept=".pdf,.doc,.docx"> -->

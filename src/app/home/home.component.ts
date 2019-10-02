@@ -1,0 +1,110 @@
+﻿import { Component, OnInit, OnDestroy , Inject} from '@angular/core';
+import { Subscription } from 'rxjs';
+import { first } from 'rxjs/operators';
+
+import { User } from '../_models';
+import { UserService, AuthenticationService } from '../_services';
+import { Menu } from '../_models/menu';
+import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
+
+
+
+@Component({ templateUrl: 'home.component.html'})
+export class HomeComponent implements OnInit, OnDestroy {
+    // tslint:disable-next-line:variable-name
+    login_ris: any;
+    currentUserSubscription: Subscription;
+    currentUser: User;
+    users: User[] = [];
+    menus: Menu[] = [];
+
+    indexMenuSelected = 0;
+
+    constructor(
+        private authenticationService: AuthenticationService,
+        private userService: UserService,
+        public dialog: MatDialog) {
+        this.currentUserSubscription = this.authenticationService.currentUser.subscribe(data => {
+            this.login_ris = data;
+        });
+    }
+
+    openDialog(): void {
+        const dialogRef = this.dialog.open(DialogOverviewExampleDialog, {
+            width: '250px',
+            data: {}
+        });
+
+        dialogRef.afterClosed().subscribe(result => {
+            console.log('The dialog was closed' + result);
+        });
+    }
+
+    ngOnInit() {
+        this.getCurrentUser();
+
+        this.loadLastMenus(1);
+     //   this.loadAllUsers();
+    }
+
+
+    ngOnDestroy() {
+        // unsubscribe to ensure no memory leaks
+        this.currentUserSubscription.unsubscribe();
+    }
+
+    deleteUser(id: number) {
+        this.userService.delete(id).pipe(first()).subscribe(() => {
+            this.loadAllUsers();
+        });
+    }
+
+    private loadAllUsers() {
+        this.userService.getAll().pipe(first()).subscribe(users => {
+            this.users = users;
+        });
+    }
+
+    private getCurrentUser() {
+        this.userService.getByToken(this.login_ris.data).pipe(first()).subscribe((ris) => {
+            this.currentUser = ris;
+        });
+    }
+
+    loadLastMenus(nMenu: number) {
+        this.userService.getLastMenus(nMenu, this.login_ris.data).pipe(first()).subscribe((ris: any) => {
+            console.log(JSON.stringify(ris.data));
+            this.menus = ris.data;
+        });
+    }
+
+fileChange(event) {
+    const fileList: FileList = event.target.files;
+    if (fileList.length > 0) {
+      this.userService.pushNewMenu(fileList, this.login_ris.data).pipe(first()).subscribe((ris: any) => {
+        console.log(ris.msg);
+        this.loadLastMenus(10);
+      });
+    }
+}
+
+
+}
+
+@Component({
+    // tslint:disable-next-line:component-selector
+    selector: 'dialog-choose',
+    templateUrl: 'dialog-choose.html',
+  })
+  // tslint:disable-next-line:component-class-suffix
+  export class DialogOverviewExampleDialog {
+
+    constructor(
+      public dialogRef: MatDialogRef<DialogOverviewExampleDialog>,
+      @Inject(MAT_DIALOG_DATA) public data: any) {}
+
+    onNoClick(): void {
+      this.dialogRef.close();
+    }
+
+  }
