@@ -38,8 +38,10 @@
                     <div class="card-content" *ngIf="indexMenuSelected==i">
 
                         <mat-selection-list #shoes>
-                            <mat-list-option *ngFor="let plate of menu.plates">
-                                {{plate.name}}
+                            <mat-list-option *ngFor="let plate of menu.plates" (click)="openDialog(plate)">
+                                <label>
+                                    {{plate.name}}
+                                </label>
                             </mat-list-option>
                         </mat-selection-list>
 

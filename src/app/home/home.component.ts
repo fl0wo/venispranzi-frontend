@@ -6,6 +6,7 @@ import { User } from '../_models';
 import { UserService, AuthenticationService } from '../_services';
 import { Menu } from '../_models/menu';
 import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
+import { MatSelectionList } from '@angular/material';
 
 
 
@@ -29,15 +30,17 @@ export class HomeComponent implements OnInit, OnDestroy {
         });
     }
 
-    openDialog(): void {
-        const dialogRef = this.dialog.open(DialogOverviewExampleDialog, {
-            width: '250px',
-            data: {}
-        });
+    openDialog(plateSelected): void {
+      console.log('Piatto selezionato : ' + JSON.stringify(plateSelected));
 
-        dialogRef.afterClosed().subscribe(result => {
-            console.log('The dialog was closed' + result);
-        });
+      const dialogRef = this.dialog.open(DialogOverviewExampleDialog, {
+          width: '250px',
+          data: plateSelected
+      });
+
+      dialogRef.afterClosed().subscribe(result => {
+          console.log('The dialog was closed' + result);
+      });
     }
 
     ngOnInit() {
@@ -88,7 +91,6 @@ fileChange(event) {
     }
 }
 
-
 }
 
 @Component({
@@ -104,6 +106,7 @@ fileChange(event) {
       @Inject(MAT_DIALOG_DATA) public data: any) {}
 
     onNoClick(): void {
+      // deselezionare il piatto precedentemente selezionato.
       this.dialogRef.close();
     }
 
