@@ -1,17 +1,29 @@
-<h1 mat-dialog-title>Piatto : {{data.name}}</h1>
+<h1 mat-dialog-title>Piatto : {{data.plateSelected.name}}</h1>
 <div mat-dialog-content>
     <p>Ingredienti?</p>
 
-    <mat-selection-list #shoes>
-        <mat-list-option *ngFor="let ing of data.ingredients" selected>
-            <label>
-                    {{ing}}
-                </label>
-        </mat-list-option>
+    <mat-selection-list #selectedIngredients>
+        <div *ngFor="let ing of data.plateSelected.ingredients">
+            <mat-list-option>
+                <label>
+                      {{ing}}
+                  </label>
+            </mat-list-option>
+        </div>
+
+        <!-- <div *ngFor="let chose of data.choiches">
+            <mat-list-option>
+                <label>
+                      {{chose.plate.name}}
+                  </label>
+            </mat-list-option>
+        </div> -->
+
     </mat-selection-list>
 
 </div>
 <div mat-dialog-actions>
     <button mat-button (click)="onNoClick()">CANCELLA</button>
-    <button mat-button [mat-dialog-close]="data.animal" cdkFocusInitial>VAI</button>
+    <button mat-button [mat-dialog-close]="selectedIngredients.selectedOptions.selected" cdkFocusInitial>VAI</button>
 </div>
+<!-- [mat-dialog-close]="selectedIngredients.selectedOptions.selected"  -->

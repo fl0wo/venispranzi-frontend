@@ -39,7 +39,6 @@ export class UserService {
     }
 
     getLastMenus(nMenus: number, token: string) {
-
         const headers = new HttpHeaders()
         .set('Accept', 'application/json')
         .set('Authorization', token);
@@ -48,10 +47,11 @@ export class UserService {
         return this.http.get(this.baseUrl + '/menu/all', {headers});
     }
     pushNewMenu(fileList: FileList, token: string) {
+        console.log('L : ' + fileList.length);
 
         const file: File = fileList[0];
         const formData: FormData = new FormData();
-        formData.append('file', file, file.name);
+        formData.set('file', file, file.name);
 
         const headers = new HttpHeaders()
         // .set('Content-Type', 'multipart/form-data')
@@ -60,5 +60,13 @@ export class UserService {
 
 
         return this.http.post(this.baseUrl + '/menu/pdf/upload', formData, {headers});
+    }
+
+    setPlateChoice(plate: object, idMenu: string, token: string) {
+        const headers = new HttpHeaders()
+        .set('Accept', 'application/json')
+        .set('Authorization', token);
+
+        return this.http.post(this.baseUrl + '/menu/choice', {plate, idMenu}, {headers});
     }
 }

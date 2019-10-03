@@ -26,33 +26,27 @@
 
                 <div class="card">
                     <header class="card-header">
-                        <p class="card-header-title">
-                            Piatti
-                        </p>
+                        <p class="card-header-title">Piatti</p>
                         <a href="#" class="card-header-icon" aria-label="more options">
                             <span class="icon">
-                              <i class="fas fa-angle-down" aria-hidden="true"></i>
+                                <i class="material-icons" style="margin-left: 70%">label_important</i>
                             </span>
                         </a>
                     </header>
                     <div class="card-content" *ngIf="indexMenuSelected==i">
 
-                        <mat-selection-list #shoes>
-                            <mat-list-option *ngFor="let plate of menu.plates" (click)="openDialog(plate)">
-                                <label>
+                        <mat-selection-list #plates>
+                            <div *ngFor="let plate of menu.plates">
+                                <mat-list-option (click)="openDialog(plate,menu._id,menu.participants)">
+                                    <label>
                                     {{plate.name}}
                                 </label>
-                            </mat-list-option>
+                                </mat-list-option>
+                            </div>
                         </mat-selection-list>
-
-
-
                         <p>
-                            Options selected: {{shoes.selectedOptions.selected.length}}
+                            Options selected: {{plates.selectedOptions.selected.length}}
                         </p>
-
-
-
                     </div>
                     <footer class="card-footer">
 
