@@ -46,6 +46,15 @@ export class UserService {
 
         return this.http.get(this.baseUrl + '/menu/all', {headers});
     }
+
+    getMyChoices(idMenu: string, token: string) {
+      const headers = new HttpHeaders()
+      .set('Accept', 'application/json')
+      .set('Authorization', token);
+
+      return this.http.post(this.baseUrl + '/menu/choice/all', {idMenu}, {headers});
+    }
+
     pushNewMenu(fileList: FileList, token: string) {
         console.log('L : ' + fileList.length);
 

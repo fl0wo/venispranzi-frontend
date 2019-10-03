@@ -24,7 +24,7 @@
                 </div>
                 <div style="margin-left : 22%">
                     <p>
-                        <button (click)="openChoicesDialog(menu.participants)" mat-flat-button style="color:white;background-color:#E65156">Visualizza Scelte</button>
+                        <button (click)="openChoicesDialog(menu._id)" mat-flat-button style="color:white;background-color:#E65156">Visualizza Scelte</button>
                     </p>
                 </div>
 
@@ -50,7 +50,7 @@
                             </div>
                         </mat-selection-list>
                         <p>
-                            Options selected: {{plates.selectedOptions.selected.length}}
+                            Piatti selezionati : {{plates.selectedOptions.selected.length}}
                         </p>
                     </div>
                     <footer class="card-footer">

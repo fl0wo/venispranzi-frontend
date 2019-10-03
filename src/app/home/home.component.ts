@@ -51,7 +51,6 @@ export class HomeComponent implements OnInit, OnDestroy {
 
         plateSelected.selectedIngredients = selIngArr;
         this.userService.setPlateChoice(plateSelected, idMenu, this.login_ris.data).pipe(first()).subscribe(() => {
-
           this.allert.success('Scelta inviata!');
         });
 
@@ -60,26 +59,31 @@ export class HomeComponent implements OnInit, OnDestroy {
     });
   }
 
-  openChoicesDialog(participants: Array<any>): void {
+  openChoicesDialog(idMenu: string): void {
 
-    console.log('OHHH : ' + participants);
+    // NON PRENDERSI COSI I PARTECIPANTI MA FARE UNA GET REQUEST AL SERVER
+    // usa mongo projection
 
-    const dialogRef = this.dialog.open(ChoichesDialog, {
-      width: '450px',
-      data: {participants}
+    this.userService.getMyChoices(idMenu, this.login_ris.data).pipe(first()).subscribe((ris: any) => {
+
+      const dialogRef = this.dialog.open(ChoichesDialog, {
+        width: '450px',
+        data: {participants : ris.data}
+      });
+
+      dialogRef.afterClosed().subscribe(selectedIngredients => {
+        if (selectedIngredients) {
+          const selIngArr = [];
+
+          selectedIngredients.forEach(piatto => {
+            selIngArr.push(piatto._text.nativeElement.outerText.trim());
+            console.log(piatto._text.nativeElement.outerText.trim());
+            console.log(piatto);
+          });
+        }
+    });
     });
 
-    dialogRef.afterClosed().subscribe(selectedIngredients => {
-      if (selectedIngredients) {
-        const selIngArr = [];
-
-        selectedIngredients.forEach(piatto => {
-          selIngArr.push(piatto._text.nativeElement.outerText.trim());
-          console.log(piatto._text.nativeElement.outerText.trim());
-          console.log(piatto);
-        });
-      }
-  });
 }
 
   ngOnInit() {
