@@ -1,0 +1,28 @@
+<h1 mat-dialog-title>Scelte prese dal team ^^</h1>
+<div mat-dialog-content>
+    <p><small>
+{{data.participants.length}} scelte fatte.
+    </small></p>
+
+    <mat-list role="list">
+        <div *ngFor="let p of data.participants;let i=index">
+            <mat-list-item role="listitem">
+                <label>
+               {{p.user.name}} {{p.user.surname}}
+                {{p.plate.name}}
+
+                <i class="material-icons" (click)="deleteChoice(i)">
+                    cancel
+                    </i>
+
+              </label>
+            </mat-list-item>
+        </div>
+    </mat-list>
+
+</div>
+<div mat-dialog-actions>
+    <button mat-button (click)="onNoClick()">IN DIETRO</button>
+    <button mat-button [mat-dialog-close]="" cdkFocusInitial>OK PRENOTATO</button>
+</div>
+<!-- [mat-dialog-close]="selectedIngredients.selectedOptions.selected"  -->

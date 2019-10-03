@@ -6,11 +6,10 @@
     Menù di oggi! :
 </h1>
 
-
 <ul>
     <li *ngFor="let menu of menus;let i = index">
 
-        <div class="card" style="padding : 15px">
+        <div class="card" style="padding : 5px">
             <div class="card-content">
                 <div class="media">
                     <div class="media-left">
@@ -18,26 +17,32 @@
                             <img src="https://static.123apps.com/pdf/i/fav/64.png" alt="Download image">
                         </figure>
                     </div>
-                    <div class="media-content" style="padding-left : 10px">
-                        <p class="title is-4"> Menù inserito da : {{menu.inserted_by.name}} {{menu.inserted_by.surname}}</p>
-                        <p class="title is-4"> {{menu.inserted_by.email}}</p>
+                    <div class="media-content" style="padding-left : 5px">
+                        <p> Menù inserito da : <br><small> {{menu.inserted_by.name}} {{menu.inserted_by.surname}}</small></p>
                     </div>
+
+                </div>
+                <div style="margin-left : 22%">
+                    <p>
+                        <button (click)="openChoicesDialog(menu.participants)" mat-flat-button style="color:white;background-color:#E65156">Visualizza Scelte</button>
+                    </p>
                 </div>
 
                 <div class="card">
-                    <header class="card-header">
-                        <p class="card-header-title">Piatti</p>
-                        <a href="#" class="card-header-icon" aria-label="more options">
-                            <span class="icon">
-                                <i class="material-icons" style="margin-left: 70%">label_important</i>
-                            </span>
-                        </a>
+                    <header class="card-header" style="padding : 5px" (click)="indexMenuSelected==i ? indexMenuSelected =-1 : indexMenuSelected = i">
+                        <p class="card-header-title" style="margin-left : 6px;margin-bottom: 6px">
+                            Piatti :
+
+                            <i class="fas fa-angle-down" style="margin-left:70%" aria-hidden="true"></i>
+
+                        </p>
+
                     </header>
                     <div class="card-content" *ngIf="indexMenuSelected==i">
 
                         <mat-selection-list #plates>
                             <div *ngFor="let plate of menu.plates">
-                                <mat-list-option (click)="openDialog(plate,menu._id,menu.participants)">
+                                <mat-list-option (click)="openPlateDialog(plate,menu._id,menu.participants)">
                                     <label>
                                     {{plate.name}}
                                 </label>

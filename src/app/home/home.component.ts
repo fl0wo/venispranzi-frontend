@@ -31,10 +31,10 @@ export class HomeComponent implements OnInit, OnDestroy {
     });
   }
 
-  openDialog(plateSelected, idMenu, choiches ): void {
+  openPlateDialog(plateSelected, idMenu, choiches ): void {
     console.log('Piatto selezionato : ' + JSON.stringify(plateSelected));
 
-    const dialogRef = this.dialog.open(DialogOverviewExampleDialog, {
+    const dialogRef = this.dialog.open(PlateDialog, {
       width: '250px',
       data: {plateSelected,choiches}
     });
@@ -59,6 +59,28 @@ export class HomeComponent implements OnInit, OnDestroy {
 
     });
   }
+
+  openChoicesDialog(participants: Array<any>): void {
+
+    console.log('OHHH : ' + participants);
+
+    const dialogRef = this.dialog.open(ChoichesDialog, {
+      width: '450px',
+      data: {participants}
+    });
+
+    dialogRef.afterClosed().subscribe(selectedIngredients => {
+      if (selectedIngredients) {
+        const selIngArr = [];
+
+        selectedIngredients.forEach(piatto => {
+          selIngArr.push(piatto._text.nativeElement.outerText.trim());
+          console.log(piatto._text.nativeElement.outerText.trim());
+          console.log(piatto);
+        });
+      }
+  });
+}
 
   ngOnInit() {
     this.getCurrentUser();
@@ -116,10 +138,10 @@ export class HomeComponent implements OnInit, OnDestroy {
   templateUrl: 'dialog-choose.html',
 })
 // tslint:disable-next-line:component-class-suffix
-export class DialogOverviewExampleDialog {
+export class PlateDialog {
 
   constructor(
-    public dialogRef: MatDialogRef<DialogOverviewExampleDialog>,
+    public dialogRef: MatDialogRef<PlateDialog>,
     @Inject(MAT_DIALOG_DATA) public data: any) { }
 
   onNoClick(): void {
@@ -134,4 +156,29 @@ export class DialogOverviewExampleDialog {
     console.log('Bho : ' + name);
     return true;
   }
+}
+
+
+@Component({
+  // tslint:disable-next-line:component-selector
+  selector: 'dialog-chooses',
+  templateUrl: 'dialog-chooses.html',
+})
+// tslint:disable-next-line:component-class-suffix
+export class ChoichesDialog {
+
+  constructor(
+    public dialogRef: MatDialogRef<ChoichesDialog>,
+    @Inject(MAT_DIALOG_DATA) public data: any) { }
+
+  onNoClick(): void {
+    // deselezionare il piatto precedentemente selezionato.
+    this.dialogRef.close();
+  }
+
+  deleteChoice(indexOfChoiceToDelete): void {
+    console.log(indexOfChoiceToDelete);
+
+  }
+
 }

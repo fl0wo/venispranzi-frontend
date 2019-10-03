@@ -5,7 +5,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AlertComponent } from './_components';
-import { HomeComponent, DialogOverviewExampleDialog } from './home';
+import { HomeComponent, PlateDialog,ChoichesDialog } from './home';
 import { LoginComponent } from './login';
 import { RegisterComponent } from './register';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
@@ -25,7 +25,8 @@ import { MatButtonModule, MatCardModule, MatMenuModule, MatToolbarModule, MatIco
     HomeComponent,
     LoginComponent,
     RegisterComponent,
-    DialogOverviewExampleDialog
+    ChoichesDialog,
+    PlateDialog
   ],
   imports: [
     BrowserModule,
@@ -43,7 +44,8 @@ import { MatButtonModule, MatCardModule, MatMenuModule, MatToolbarModule, MatIco
     MatButtonModule, MatCardModule, MatMenuModule, MatToolbarModule, MatIconModule
     ],
 
-    entryComponents: [DialogOverviewExampleDialog],
+    entryComponents: [    ChoichesDialog,
+      PlateDialog],
 
   providers: [],
   bootstrap: [AppComponent]
