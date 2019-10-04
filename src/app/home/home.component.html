@@ -41,12 +41,27 @@
                     <div class="card-content" *ngIf="indexMenuSelected==i">
 
                         <mat-selection-list #plates>
+
                             <div *ngFor="let plate of menu.plates">
-                                <mat-list-option (click)="openPlateDialog(plate,menu._id,menu.participants)">
-                                    <label>
-                                    {{plate.name}}
-                                </label>
+                                <mat-list-option (click)="openPlateDialog(plate,menu._id,plates)" [value]="plate.name">
+                                    <div>
+                                        <mat-card-header>
+                                            <div mat-card-avatar class="example-header-image" style="background-image :
+                                            url('https://ui-avatars.com/api/?rounded=true&name=Lasagna');">
+                                            </div>
+                                            <mat-card-title><small> {{plate.name}}</small>
+                                            </mat-card-title>
+                                            <mat-card-subtitle><small> {{plate.price}} € </small> </mat-card-subtitle>
+                                        </mat-card-header>
+                                        <!-- <img mat-card-image [src]=" 'https://https://ui-avatars.com/api/?rounded=true&name='
+                                          + plate.name
+                                          + 'color=E65156'" alt="Foto Lettere"> -->
+
+                                    </div>
+
                                 </mat-list-option>
+                                <mat-divider></mat-divider>
+
                             </div>
                         </mat-selection-list>
                         <p>
@@ -76,19 +91,20 @@
 <div class="field">
     <div class="file is-centered is-boxed is-success has-name">
         <label class="file-label">
-            <input class="file-input"type="file" (change)="fileChange($event)" placeholder="Carica Menù pdf" accept=".pdf,.doc,.docx" name="resume" >
-            <span class="file-cta">
-              <span class="file-icon">
-                <i class="fas fa-upload"></i>
-              </span>
-              <span class="file-label">
-                Upload PDF
-              </span>
-            </span>
-            <span class="file-name">
-              nome-file.pdf
-            </span>
-          </label>
+      <input class="file-input" type="file" (change)="fileChange($event)" placeholder="Carica Menù pdf"
+        accept=".pdf,.doc,.docx" name="resume">
+      <span class="file-cta">
+        <span class="file-icon">
+          <i class="fas fa-upload"></i>
+        </span>
+        <span class="file-label">
+          Upload PDF
+        </span>
+      </span>
+      <span class="file-name">
+        nome-file.pdf
+      </span>
+    </label>
     </div>
 </div>
 

@@ -1,22 +1,42 @@
-<h1 mat-dialog-title>Scelte prese dal team ^^</h1>
+<h1 mat-dialog-title>Resoconto : </h1>
 <div mat-dialog-content>
-    <p><small>
-{{data.participants.length}} scelte fatte.
-    </small></p>
+    <p>{{data.participants.length}}<small>
+      scelte fatte. <br>
+      cliccarne una per modificarla
+    </small>
+    </p>
 
-    <mat-list role="list">
+    <mat-list role="list" style="padding: 0;margin: 0;border-spacing: .3em;">
         <div *ngFor="let p of data.participants;let i=index">
-            <mat-list-item role="listitem">
-                <label>
-               {{p.user.name}} {{p.user.surname}}
-                {{p.plate.name}}
+            <div *ngIf="rnDeletedChoices.indexOf(i) === -1">
+                <mat-list-item role="listitem" style="width: 100%;">
+                    <div (click)="selectedChose == i ? selectedChose=-1 : selectedChose=i" style="margin: 5px">
+                        {{p.user.name}}
+                        <!-- {{p.user.surname}} -->
+                        {{p.plate.name}}
+                        <small *ngIf="p.plate.ingredients == p.plate.selectedIngredients">con tutto</small>
+                    </div>
+                    <i class="material-icons" style="position: absolute;right: 0px;opacity: .5;" *ngIf="p.user._id == data.userId" (click)="deleteChoice(i,data.idMenu)">
+            cancel
+          </i>
+                </mat-list-item>
 
-                <i class="material-icons" (click)="deleteChoice(i)">
-                    cancel
-                    </i>
+                <div *ngIf="selectedChose == i">
 
-              </label>
-            </mat-list-item>
+                    <mat-form-field style="width: 100%;">
+                        <mat-chip-list #chipList aria-label="Fruit selection">
+                            <mat-chip *ngFor="let ingredient of p.plate.selectedIngredients" [selectable]="selectable" [removable]="removable" (removed)="deleteIngredient(ingredient,p.plate)">
+                                {{ingredient}}
+                                <mat-icon matChipRemove *ngIf="p.user._id == data.userId ? true : false">cancel
+                                </mat-icon>
+                            </mat-chip>
+                            <input placeholder="Ingredienti per {{p.user.name}} : " [matChipInputSeparatorKeyCodes]="separatorKeysCodes" [matChipInputAddOnBlur]="addOnBlur" [matChipInputFor]="chipList" (matChipInputTokenEnd)="addIngredient($event,p.plate)">
+                        </mat-chip-list>
+                        <!-- [matChipInputSeparatorKeyCodes]="separatorKeysCodes" [matChipInputAddOnBlur]="addOnBlur" -->
+                    </mat-form-field>
+
+                </div>
+            </div>
         </div>
     </mat-list>
 

@@ -8,74 +8,82 @@ export class UserService {
 
   baseUrl = 'http://172.22.8.160:3000';
 
-    getByToken(token: string): any {
+  getByToken(token: string): any {
 
-        const headers = new HttpHeaders()
-        .set('Accept', 'application/json')
-        .set('Authorization', token);
-
-        return this.http.get(this.baseUrl + `/auth/me`, {headers});
-    }
-    constructor(private http: HttpClient) { }
-
-    getAll() {
-        return this.http.get<User[]>(this.baseUrl + '/users');
-    }
-
-    getById(id: number) {
-        return this.http.get(this.baseUrl + `/users/${id}`);
-    }
-
-    register(user: User) {
-        return this.http.post(this.baseUrl + '/auth/register', user);
-    }
-
-    update(user: User) {
-        return this.http.put(this.baseUrl + '/auth/register', user);
-    }
-
-    delete(id: number) {
-        return this.http.delete(this.baseUrl + '/auth/register');
-    }
-
-    getLastMenus(nMenus: number, token: string) {
-        const headers = new HttpHeaders()
-        .set('Accept', 'application/json')
-        .set('Authorization', token);
-
-
-        return this.http.get(this.baseUrl + '/menu/all', {headers});
-    }
-
-    getMyChoices(idMenu: string, token: string) {
-      const headers = new HttpHeaders()
+    const headers = new HttpHeaders()
       .set('Accept', 'application/json')
       .set('Authorization', token);
 
-      return this.http.post(this.baseUrl + '/menu/choice/all', {idMenu}, {headers});
-    }
+    return this.http.get(this.baseUrl + `/auth/me`, { headers });
+  }
+  constructor(private http: HttpClient) { }
 
-    pushNewMenu(fileList: FileList, token: string) {
-        console.log('L : ' + fileList.length);
+  getAll() {
+    return this.http.get<User[]>(this.baseUrl + '/users');
+  }
 
-        const file: File = fileList[0];
-        const formData: FormData = new FormData();
-        formData.set('file', file, file.name);
+  getById(id: number) {
+    return this.http.get(this.baseUrl + `/users/${id}`);
+  }
 
-        const headers = new HttpHeaders()
-        // .set('Content-Type', 'multipart/form-data')
-        .set('Accept', 'application/json')
-        .set('Authorization', token);
+  register(user: User) {
+    return this.http.post(this.baseUrl + '/auth/register', user);
+  }
+
+  update(user: User) {
+    return this.http.put(this.baseUrl + '/auth/register', user);
+  }
+
+  delete(id: number) {
+    return this.http.delete(this.baseUrl + '/auth/register');
+  }
+
+  getLastMenus(nMenus: number, token: string) {
+    const headers = new HttpHeaders()
+      .set('Accept', 'application/json')
+      .set('Authorization', token);
 
 
-        return this.http.post(this.baseUrl + '/menu/pdf/upload', formData, {headers});
-    }
+    return this.http.get(this.baseUrl + '/menu/all', { headers });
+  }
 
-    setPlateChoice(plate: object, idMenu: string, token: string) {
-        const headers = new HttpHeaders()
-        .set('Accept', 'application/json')
-        .set('Authorization', token);
+  getMyChoices(idMenu: string, token: string) {
+    const headers = new HttpHeaders()
+      .set('Accept', 'application/json')
+      .set('Authorization', token);
 
-        return this.http.post(this.baseUrl + '/menu/choice', {plate, idMenu}, {headers});
-    }
+    return this.http.post(this.baseUrl + '/menu/choice/all', { idMenu }, { headers });
+  }
+
+  setPlateChoice(plate: object, idMenu: string, token: string) {
+    const headers = new HttpHeaders()
+      .set('Accept', 'application/json')
+      .set('Authorization', token);
+
+    return this.http.post(this.baseUrl + '/menu/choice', { plate, idMenu }, { headers });
+  }
+
+  deleteChoiceOfMenu(indexOfPartecipantChoice: any, idMenu: any, token: string) {
+    const headers = new HttpHeaders()
+      .set('Accept', 'application/json')
+      .set('Authorization', token);
+
+    return this.http.post(this.baseUrl + '/menu/choice/delete', { indexOfPartecipantChoice, idMenu }, { headers });
+  }
+
+  pushNewMenu(fileList: FileList, token: string) {
+    const file: File = fileList[0];
+    const formData: FormData = new FormData();
+    formData.set('file', file, file.name);
+
+    const headers = new HttpHeaders()
+      // .set('Content-Type', 'multipart/form-data')
+      .set('Accept', 'application/json')
+      .set('Authorization', token);
+
+
+    return this.http.post(this.baseUrl + '/menu/pdf/upload', formData, { headers });
+  }
+
+
 }

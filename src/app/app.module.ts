@@ -11,6 +11,8 @@ import { RegisterComponent } from './register';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { MatDialogModule } from '@angular/material/dialog';
+import {MatChipsModule} from '@angular/material/chips';
+
 
 import { ImageViewerModule } from 'ng2-image-viewer';
 import {MatListModule} from '@angular/material/list';
@@ -41,8 +43,9 @@ import { MatButtonModule, MatCardModule, MatMenuModule, MatToolbarModule, MatIco
     MatListModule,
     MatFormFieldModule,
     MatAutocompleteModule, MatInputModule,
-    MatButtonModule, MatCardModule, MatMenuModule, MatToolbarModule, MatIconModule
-    ],
+    MatButtonModule, MatCardModule, MatMenuModule, MatToolbarModule, MatIconModule,
+    MatChipsModule
+  ],
 
     entryComponents: [    ChoichesDialog,
       PlateDialog],

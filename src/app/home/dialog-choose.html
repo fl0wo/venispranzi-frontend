@@ -1,29 +1,39 @@
-<h1 mat-dialog-title>Piatto : {{data.plateSelected.name}}</h1>
+<small>{{data.plateSelected.type}} : </small>
+<small style="
+float: right;
+color: white;
+border-radius: 50px;
+min-width: 35px;
+text-align: center;
+background-color: #E65156">{{data.plateSelected.price}} €</small>
+<h1 mat-dialog-title style="text-align: center">
+    {{data.plateSelected.name}}
+</h1>
+
+
 <div mat-dialog-content>
-    <p>Ingredienti?</p>
+    <div>
+        <p *ngIf="data.plateSelected.ingredients.length >0">Ingredienti?</p>
+        <mat-selection-list #selectedIngredients>
+            <div *ngFor="let ing of data.plateSelected.ingredients">
+                <mat-list-option [value]="ing.name" [color]="blue">
+                    <label>
+            {{ing}}
+          </label>
+                </mat-list-option>
+            </div>
 
-    <mat-selection-list #selectedIngredients>
-        <div *ngFor="let ing of data.plateSelected.ingredients">
-            <mat-list-option>
-                <label>
-                      {{ing}}
-                  </label>
-            </mat-list-option>
-        </div>
+        </mat-selection-list>
+    </div>
 
-        <!-- <div *ngFor="let chose of data.choiches">
-            <mat-list-option>
-                <label>
-                      {{chose.plate.name}}
-                  </label>
-            </mat-list-option>
-        </div> -->
+    <div *ngIf="data.plateSelected.ingredients.length == 0">
+        <p>Nessun ingrediente da visualizzare.</p>
+    </div>
 
-    </mat-selection-list>
 
 </div>
 <div mat-dialog-actions>
-    <button mat-button (click)="onNoClick()">CANCELLA</button>
+    <button mat-button (click)="onNoClick()">IN DIETRO</button>
     <button mat-button [mat-dialog-close]="selectedIngredients.selectedOptions.selected" cdkFocusInitial>VAI</button>
 </div>
 <!-- [mat-dialog-close]="selectedIngredients.selectedOptions.selected"  -->

@@ -1,4 +1,4 @@
-﻿import { Component, OnInit, OnDestroy, Inject } from '@angular/core';
+﻿import { Component, OnInit, OnDestroy, Inject, ViewChild } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { first } from 'rxjs/operators';
 
@@ -6,11 +6,10 @@ import { User } from '../_models';
 import { UserService, AuthenticationService, AlertService } from '../_services';
 import { Menu } from '../_models/menu';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { MatSelectionList } from '@angular/material';
+import { MatSelectionList, MatChipInputEvent, MatListOption } from '@angular/material';
+import { COMMA, ENTER } from '@angular/cdk/keycodes';
 
-
-
-@Component({ templateUrl: 'home.component.html' })
+@Component({ templateUrl: 'home.component.html', styleUrls: ['./home.component.scss'] })
 export class HomeComponent implements OnInit, OnDestroy {
   // tslint:disable-next-line:variable-name
   login_ris: any;
@@ -31,12 +30,12 @@ export class HomeComponent implements OnInit, OnDestroy {
     });
   }
 
-  openPlateDialog(plateSelected, idMenu, choiches ): void {
+  openPlateDialog(plateSelected, idMenu, selectedPlates: MatSelectionList): void {
     console.log('Piatto selezionato : ' + JSON.stringify(plateSelected));
 
-    const dialogRef = this.dialog.open(PlateDialog, {
+    const dialogRef = this.dialog.open(PlateDialog, {// plateSelection
       width: '250px',
-      data: {plateSelected,choiches}
+      data: { plateSelected }
     });
 
     dialogRef.afterClosed().subscribe(selectedIngredients => {
@@ -45,15 +44,24 @@ export class HomeComponent implements OnInit, OnDestroy {
 
         selectedIngredients.forEach(piatto => {
           selIngArr.push(piatto._text.nativeElement.outerText.trim());
-          console.log(piatto._text.nativeElement.outerText.trim());
-          console.log(piatto);
         });
 
         plateSelected.selectedIngredients = selIngArr;
+
         this.userService.setPlateChoice(plateSelected, idMenu, this.login_ris.data).pipe(first()).subscribe(() => {
           this.allert.success('Scelta inviata!');
         });
+      } else {
+        // Ha premuto cancella
+        let toDeselectOption: MatListOption;
 
+        selectedPlates.selectedOptions.selected.forEach(matOption => {
+          if (matOption.value.toString().trim() === plateSelected.name.trim()) {
+            toDeselectOption = matOption;
+          }
+        });
+
+        selectedPlates.selectedOptions.deselect(toDeselectOption);
       }
 
     });
@@ -63,13 +71,14 @@ export class HomeComponent implements OnInit, OnDestroy {
 
     // NON PRENDERSI COSI I PARTECIPANTI MA FARE UNA GET REQUEST AL SERVER
     // usa mongo projection
-
     this.userService.getMyChoices(idMenu, this.login_ris.data).pipe(first()).subscribe((ris: any) => {
+      // if (ris.ok)
 
       const dialogRef = this.dialog.open(ChoichesDialog, {
         width: '450px',
-        data: {participants : ris.data}
+        data: { participants: ris.data, login_ris: this.login_ris, idMenu, userId: ris.userMadeRequest }
       });
+
 
       dialogRef.afterClosed().subscribe(selectedIngredients => {
         if (selectedIngredients) {
@@ -77,20 +86,17 @@ export class HomeComponent implements OnInit, OnDestroy {
 
           selectedIngredients.forEach(piatto => {
             selIngArr.push(piatto._text.nativeElement.outerText.trim());
-            console.log(piatto._text.nativeElement.outerText.trim());
-            console.log(piatto);
           });
         }
-    });
+      });
     });
 
-}
+  }
 
   ngOnInit() {
     this.getCurrentUser();
 
-    this.loadLastMenus(1);
-    //   this.loadAllUsers();
+    this.loadLastMenus(10);
   }
 
 
@@ -149,11 +155,8 @@ export class PlateDialog {
     @Inject(MAT_DIALOG_DATA) public data: any) { }
 
   onNoClick(): void {
-    // deselezionare il piatto precedentemente selezionato.
+    console.log('chiuso');
     this.dialogRef.close();
-  }
-
-  onSelection($event, selection): void {
   }
 
   precedentementeSelezionato(name): boolean {
@@ -173,16 +176,58 @@ export class ChoichesDialog {
 
   constructor(
     public dialogRef: MatDialogRef<ChoichesDialog>,
+    public userService: UserService,
+    public allertService: AlertService,
     @Inject(MAT_DIALOG_DATA) public data: any) { }
+  removable = true;
+  addOnBlur = true;
+  readonly separatorKeysCodes: number[] = [ENTER, COMMA];
+
+  selectedChose = -1;
+
+  rnDeletedChoices = [];
 
   onNoClick(): void {
-    // deselezionare il piatto precedentemente selezionato.
     this.dialogRef.close();
   }
 
-  deleteChoice(indexOfChoiceToDelete): void {
-    console.log(indexOfChoiceToDelete);
+  deleteChoice(indexOfPartecipantChoice, idMenu): void {
+
+    this.userService.deleteChoiceOfMenu(indexOfPartecipantChoice, idMenu, this.data.login_ris.data)
+      .pipe(first()).subscribe((ris: any) => {
+        if (ris.ok) {
+          this.rnDeletedChoices.push(indexOfPartecipantChoice);
+          this.allertService.success(ris.msg);
+        } else {
+          this.allertService.error(ris.msg);
+        }
+
+      });
 
   }
 
+  addIngredient(event: MatChipInputEvent, plate: any): void {
+    const input = event.input;
+    const value = event.value;
+
+    if ((value || '').trim()) {
+      plate.selectedIngredients.push(value.trim());
+    }
+
+    if (input) {
+      input.value = '';
+    }
+  }
+
+  deleteIngredient(ing: string, plate: any): void {
+    const index = plate.selectedIngredients.indexOf(ing.trim());
+
+    if (index >= 0) {
+      plate.selectedIngredients.splice(index, 1);
+
+      // deleteIng
+    }
+  }
+
 }
+
