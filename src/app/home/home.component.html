@@ -43,15 +43,20 @@
                         <mat-selection-list #plates>
 
                             <div *ngFor="let plate of menu.plates">
-                                <mat-list-option (click)="openPlateDialog(plate,menu._id,plates)" [value]="plate.name">
+                                <mat-list-option style="padding : 8px;height: auto;" (click)="openPlateDialog(plate,menu._id,plates)" [value]="plate.name">
                                     <div>
                                         <mat-card-header>
-                                            <div mat-card-avatar class="example-header-image" style="background-image :
-                                            url('https://ui-avatars.com/api/?rounded=true&name=Lasagna');">
+
+                                            <div>
+                                                <!-- <div mat-card-avatar class="example-header-image" style="background-image :
+                                            url('https://ui-avatars.com/api/?rounded=true&name=Lasagna'); width: 10px">
+                                            </div> -->
+
+                                                <mat-card-title class="ellipsis"><small> {{plate.name}}</small>
+                                                </mat-card-title>
+                                                <mat-card-subtitle><small> {{plate.price}} € </small> </mat-card-subtitle>
                                             </div>
-                                            <mat-card-title><small> {{plate.name}}</small>
-                                            </mat-card-title>
-                                            <mat-card-subtitle><small> {{plate.price}} € </small> </mat-card-subtitle>
+
                                         </mat-card-header>
                                         <!-- <img mat-card-image [src]=" 'https://https://ui-avatars.com/api/?rounded=true&name='
                                           + plate.name

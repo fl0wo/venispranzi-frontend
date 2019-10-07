@@ -17,3 +17,30 @@ mat-checkbox {
         }
     }
 }
+
+.crop {
+    width: 300px;
+    height: 100px;
+    border: 1px solid black;
+    overflow: hidden;
+    font-size: 1em;
+}
+
+.ellipsis {
+    text-overflow: ellipsis;
+}
+
+.overflow {
+    width: 10em;
+    outline: 1px solid #000;
+    margin: 0 0 2em 0;
+    /**
+   * Required properties to achieve text-overflow
+   */
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+.app-class .mat-list-item {
+    height: auto;
+}
